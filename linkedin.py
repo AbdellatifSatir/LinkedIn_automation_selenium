@@ -6,7 +6,7 @@ import time
 
 LOGIN_URL = "https://linkedin.com/login"
 CONNECTIONS_URL = "https://www.linkedin.com/mynetwork/invite-connect/connections/"
-driver = webdriver.Edge()
+driver = webdriver.Chrome()
 driver.get(LOGIN_URL)
 time.sleep(1)
 
@@ -40,7 +40,7 @@ for i in range(0,len(message_buttons)):
 
         # Click on the message div
         msg_div = driver.find_element(By.XPATH,"//div[starts-with(@class, 'msg-form__contenteditable')]")
-        msg_div.click()
+        driver.execute_script("arguments[0].click();", msg_div)
 
         # Write a message
         paragraphs = driver.find_elements(By.TAG_NAME,"p")
@@ -48,14 +48,15 @@ for i in range(0,len(message_buttons)):
         time.sleep(2)
 
         # Send the message
-        driver.find_element(By.XPATH, "//button[@type='submit']").click()
+        send_btn = driver.find_element(By.XPATH, "//button[@type='submit']")
+        driver.execute_script("arguments[0].click();", send_btn)
         time.sleep(2)
         
         # X button for close conversation
         x_button = driver.find_element(By.XPATH,"//button[starts-with(@class, 'msg-overlay-bubble-header__control artdeco-button artdeco-button--circle')]")
-        x_button.click()
+        driver.execute_script("arguments[0].click();", x_button)
 
-        if i==2:
+        if i == 3:
             break
 
     except Exception as e:
