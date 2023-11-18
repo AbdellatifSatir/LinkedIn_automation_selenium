@@ -6,7 +6,13 @@ import time
 
 LOGIN_URL = "https://linkedin.com/login"
 CONNECTIONS_URL = "https://www.linkedin.com/mynetwork/invite-connect/connections/"
-driver = webdriver.Chrome()
+
+from selenium.webdriver.chrome.service import Service
+service = Service()
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(service=service, options=options)
+
+# driver = webdriver.Chrome()
 driver.get(LOGIN_URL)
 time.sleep(1)
 
@@ -41,10 +47,13 @@ for i in range(0,len(message_buttons)):
         # Click on the message div
         msg_div = driver.find_element(By.XPATH,"//div[starts-with(@class, 'msg-form__contenteditable')]")
         driver.execute_script("arguments[0].click();", msg_div)
+        time.sleep(1)
 
         # Write a message
+        user_fulname = driver.find_element(By.XPATH,"//button[starts-with(@class, 'mv1 mr1 artdeco-pill artdeco-pill--slate')]")
+        print(user_fulname.text)
         paragraphs = driver.find_elements(By.TAG_NAME,"p")
-        paragraphs[-5].send_keys("Sorry hada gha automated message 🙏🙏🙏")
+        paragraphs[-5].send_keys(f"Hello {user_fulname.text}, Sorry hada gha automated message 🙏🙏🙏")
         time.sleep(2)
 
         # Send the message
@@ -56,10 +65,10 @@ for i in range(0,len(message_buttons)):
         x_button = driver.find_element(By.XPATH,"//button[starts-with(@class, 'msg-overlay-bubble-header__control artdeco-button artdeco-button--circle')]")
         driver.execute_script("arguments[0].click();", x_button)
 
-        if i == 3:
+        if i == 2:
             break
 
     except Exception as e:
         print(e)
 
-input("Press Enter to close the browser...\n")
+input("Press any key to close the browser...\n")
