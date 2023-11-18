@@ -7,12 +7,7 @@ import time
 LOGIN_URL = "https://linkedin.com/login"
 CONNECTIONS_URL = "https://www.linkedin.com/mynetwork/invite-connect/connections/"
 
-from selenium.webdriver.chrome.service import Service
-service = Service()
-options = webdriver.ChromeOptions()
-driver = webdriver.Chrome(service=service, options=options)
-
-# driver = webdriver.Chrome()
+driver = webdriver.Chrome()
 driver.get(LOGIN_URL)
 time.sleep(1)
 
