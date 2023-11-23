@@ -14,10 +14,8 @@ driver.get(LOGIN_URL)
 time.sleep(1)
 
 # LOGIN PROCESS
-user_mail = driver.find_element(By.ID, "username")
-user_mail.send_keys(email)
-user_pass = driver.find_element(By.ID, "password")
-user_pass.send_keys(password)
+driver.find_element(By.ID, "username").send_keys(email)
+driver.find_element(By.ID, "password").send_keys(password)
 driver.find_element(By.XPATH, "//button[@type='submit']").click()
 
 # REDIRECT TO CONNECTIONS PAGE
@@ -33,9 +31,11 @@ driver.maximize_window()
 # FIND ALL MESSAGE BUTTON TO SEND MESSAGE
 all_buttons = driver.find_elements(By.TAG_NAME,'button')
 message_buttons = [btn for btn in all_buttons if btn.text == "Message"]
-print(len(message_buttons))
+print(f"Length Messages : {len(message_buttons)}")
 time.sleep(2)
+
 MSG = ", Sorry hada gha automated message 🙏🙏🙏."
+
 
 # SENDING A MESSAGE FOR EACH NEW CONNECTION
 try:
@@ -53,9 +53,14 @@ try:
         time.sleep(2)
 
         # SCRAPE USER FULLNAME
-        user_fullname = driver.find_element(By.XPATH,"//span[starts-with(@class,'t-14 t-bold hoverable-link-text')]")
-        driver.find_element(By.XPATH,"//div[starts-with(@class, 'msg-form__contenteditable')]").send_keys(Keys.HOME)
-        print(user_fullname.text)
+        try:
+            #case 1 - no message before
+            user_fullname = driver.find_element(By.XPATH,"//div[@class='artdeco-entity-lockup__title ember-view']")
+        except:
+            #case 2 - already sent the first message before
+            user_fullname = driver.find_element(By.XPATH,"//span[starts-with(@class,'t-14 t-bold hoverable-link-text')]")
+        finally:
+            print(user_fullname.text)
         time.sleep(2)
 
         # WRITE A MESSAGE
@@ -73,10 +78,12 @@ try:
         # SEND THE MESSAGE
         wait = WebDriverWait(driver, 10)
         send_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@class='msg-form__send-button artdeco-button artdeco-button--1']")))
-        print(f"Button Text: {send_btn.text}")
-        print(f"Is Displayed: {send_btn.is_displayed()}")
-        print(f"Is Enabled: {send_btn.is_enabled()}")
-        driver.execute_script("arguments[0].click();", send_btn)
+        print(f"Button Text: {send_btn.text}, Is Enabled: {send_btn.is_enabled()}")
+        if send_btn.is_enabled() == True:
+            driver.execute_script("arguments[0].click();", send_btn)
+        else:
+            time.sleep(2)
+            driver.execute_script("arguments[0].click();", send_btn)
         time.sleep(2)
         
         # X BUTTON FOR CLOSE CONVERSATION
