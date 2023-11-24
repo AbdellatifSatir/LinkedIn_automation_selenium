@@ -97,4 +97,5 @@ try:
 except Exception as e:
     print(e)
 
-input("Press any key to close the browser...\n")
+finally:
+    input("Press any key to close the browser...\n")
